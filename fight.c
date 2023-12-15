@@ -1,30 +1,30 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#include<string.h>
 
 int mon_n;
 int classroom;
 
-//mon_check():monster µîÀå ¿©ºÎ¸¦ mon=rand()%(¸ó½ºÅÍ ¼ö)·Î ¹İÈ¯ÇØ monÀÌ 0ÀÌ ¾Æ´Ï¸é fight() È£Ãâ
+//mon_check():monster ë“±ì¥ ì—¬ë¶€ë¥¼ mon=rand()%(ëª¬ìŠ¤í„° ìˆ˜)ë¡œ ë°˜í™˜í•´ monì´ 0ì´ ì•„ë‹ˆë©´ fight() í˜¸ì¶œ
 int mon_check() {
 	return mon_n = rand() % 6;
 }
 
-
 typedef struct Skill {
 	char skill_name[20];
 	int damage;
-	int effect; //1 : ¾ÕÀ¸·Î 1~3Ä­ ÀüÁø 2 : Ã¼·Â È¸º¹ 5~30 3: Ãß°¡ µ¥¹ÌÁö 15~30
-	int skill_type; //1 : ÄÚµù, 2 : ¼öÇĞ, 3 : ¹°¸®, 4 : ±³¾ç
+	int effect; //1 : ì•ìœ¼ë¡œ 1~3ì¹¸ ì „ì§„ 2 : ì²´ë ¥ íšŒë³µ 5~30 3: ì¶”ê°€ ë°ë¯¸ì§€ 15~30
+	int skill_type; //1 : ì½”ë”©, 2 : ìˆ˜í•™, 3 : ë¬¼ë¦¬, 4 : êµì–‘
 }skill;
 
-skill s1 = { "ÄÚµùÇÏ±â", 20, 1, 1 };
+skill s1 = { "ì½”ë”©í•˜ê¸°", 20, 1, 1 };
 s1_point = &s1;
 
-skill s2 = { "µğ¹ö±ë", 5, 2, 1};
+skill s2 = { "ë””ë²„ê¹…", 5, 2, 1};
 s2_point = &s2;
 
-skill s3 = { "Çª¸®¿¡ º¯È¯",30,3,2 };
+skill s3 = { "í‘¸ë¦¬ì— ë³€í™˜",30,3,2 };
 s3_point = &s3;
 
 skill s4 = { "Pspice", 10,1,3 };
@@ -41,8 +41,8 @@ typedef struct Monster {
 	int mon_health;
 	int mon_attack;
 	char mon_name[20];
-	struct Skill* skill_point;
-	int mon_type; //1 : ÄÚµù, 2 : ¼öÇĞ, 3 : ¹°¸®, 4 : ±³¾ç
+	skill* skill_point;
+	int mon_type; //1 : ì½”ë”©, 2 : ìˆ˜í•™, 3 : ë¬¼ë¦¬, 4 : êµì–‘
 
 }mon;
 
@@ -67,54 +67,73 @@ void normal_attack(mon m, mon * mp, player* p) {
 	mon_point->mon_health = mp->mon_health - normal_dam;
 }
 
-mon m1 = { 1, 200, 10, "ÇÃ¹Ö½Ç½À", s1_point , 1};
-mon m2 = { 2,150,20,"È¸·Î¸ÁÇØ¼®", s1_point, 3};
-mon m3 = { 3,130,10,"¼±Çü´ë¼ö", s6_point, 2};
+mon m1 = { 1, 200, 10, "í”Œë°ì‹¤ìŠµ", s1_point , 1};
+mon m2 = { 2,150,20,"íšŒë¡œë§í•´ì„", s1_point, 3};
+mon m3 = { 3,130,10,"ì„ í˜•ëŒ€ìˆ˜", s6_point, 2};
 
 void stay(player* player) {
 	player->player_health += (rand() % 20);
+}
+
+
+player{
+	skill player_skill { skill skill_coding=[s1,s2,s3,s4,...] };
 }
 
 void fight(mon* mon_point) {
 
 	int action;
 	int act_num;
+	int skill_num;
 	
-	printf("%sÀÌ(°¡) ³ªÅ¸³µ´Ù!",mon->mon_name);
+	printf("%sì´(ê°€) ë‚˜íƒ€ë‚¬ë‹¤!",mon_point->mon_name);
 
-	while (mon->mon_health) {
+	while (mon_point->mon_health) {
 
-		printf("\n\n\n\n\n³ª.");
+		printf("\n\n\n\n\në‚˜.");
 		for (int i = 10; i = 0; i--) {
 			printf("__.");
 		}
 		printf("mon");
+		int i = 10;
 		for (10 - i; i = 0; i) {
 			printf(".__");
 		}
 		
 		
-			printf("\n\nÇàµ¿À» ¼±ÅÃÇÏ½Ê½Ã¿À.");
+			printf("\n\ní–‰ë™ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.");
 			scanf("%d", &action);
 	
 			if (action == 1) {
 				normal_attack();
 			}
 			else if (action == 2) {
-				skill(); //¹è¿­À» ¸¸µé¾î ½ºÅ³¸íÀ» ³Ö°í °¢ ½ºÅ³¿¡ ÇØ´çÇÏ´Â Á¤º¸¸¦ Æ÷ÀÎÅÍ·Î ¿¬°á
+				printf("\n\n1. ì½”ë”©");
+				printf("\n2. ìˆ˜í•™");
+				printf("\n3. ë¬¼ë¦¬");
+				printf("\n4. êµì–‘\n");
+				scanf("%d", skill_num);
+
+				if (skillarraynum == 1) {
+					for (int i = 0; i < nums; i++) {
+						
+						puts(skill[i]);
+					}
+				}
+				player_point->skill; //ë°°ì—´ì„ ë§Œë“¤ì–´ ìŠ¤í‚¬ëª…ì„ ë„£ê³  ê° ìŠ¤í‚¬ì— í•´ë‹¹í•˜ëŠ” ì •ë³´ë¥¼ í¬ì¸í„°ë¡œ ì—°ê²°
 			}
 			else if (action == 3) {
 				act_num = rand() % 3;
 				if (act_num == 0) {
-					printf("\n°¡¸¸È÷ ÀÖ¾ú´Ù. ÀÌ·¡µµ µÉ±î...?\n");
-					stay();//ÈŞ½Ä ½Ã hp ¼ÒÆø »ó½Â
+					printf("\nê°€ë§Œíˆ ìˆì—ˆë‹¤. ì´ë˜ë„ ë ê¹Œ...?\n");
+					stay();//íœ´ì‹ ì‹œ hp ì†Œí­ ìƒìŠ¹
 				}
 				else if (act_num == 1) {
-					printf("\n°¡¸¸È÷ ÀÖ¾ú´Ù. ¿À´ÃÀº Á» ½¬ÀÚ.\n");
+					printf("\nê°€ë§Œíˆ ìˆì—ˆë‹¤. ì˜¤ëŠ˜ì€ ì¢€ ì‰¬ì.\n");
 					stay();
 				}
 				else if (act_num == 2) {
-					printf("\n°¡¸¸È÷ ÀÖ¾ú´Ù. ³ªÁß¿¡ ÇÊ±â º¸¿©´Ş¶ó°í ÇØ¾ßÁö.\n");
+					printf("\nê°€ë§Œíˆ ìˆì—ˆë‹¤. ë‚˜ì¤‘ì— í•„ê¸° ë³´ì—¬ë‹¬ë¼ê³  í•´ì•¼ì§€.\n");
 					stay();
 				}
 			}
@@ -122,7 +141,7 @@ void fight(mon* mon_point) {
 				stop();
 			}
 			else {
-				printf("¿Ã¹Ù¸¥ ¼±ÅÃÀÌ ¾Æ´Õ´Ï´Ù.");
+				printf("ì˜¬ë°”ë¥¸ ì„ íƒì´ ì•„ë‹™ë‹ˆë‹¤.");
 				continue;
 			}
 		}
@@ -136,9 +155,9 @@ int main() {
 
 	srand(time(NULL));
 
-	if (classroom != 0) mon_check(); //°­ÀÇ½Ç ÀÔÀå½Ã¸¶´Ù ¸ó½ºÅÍ Ã¼Å©
+	if (classroom != 0) mon_check(); //ê°•ì˜ì‹¤ ì…ì¥ì‹œë§ˆë‹¤ ëª¬ìŠ¤í„° ì²´í¬
 	if (mon_check()) {
-		printf("ÀüÅõ ½ÃÀÛ!");
+		printf("ì „íˆ¬ ì‹œì‘!");
 		fight();
 	}
 }
